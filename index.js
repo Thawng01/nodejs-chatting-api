@@ -14,10 +14,11 @@ app.use(cors());
 app.use(express.json());
 
 const httpServer = createServer(app);
-
+const url = "https://nextjs-chatting.vercel.app/";
 const io = new Server(httpServer, {
     cors: {
         origin: "https://nextjs-chatting.vercel.app/",
+        methods: ["GET", "POST"],
     },
 });
 
