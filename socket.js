@@ -3,7 +3,7 @@ import { createMessage, markMessageAsRead } from "./utils/message.js";
 const socket = (io) => {
     let users = [];
     io.on("connection", (socket) => {
-        console.log("connected...");
+        // console.log("connected...");
         // add user
         socket.on("userAdded", (user) => {
             // console.log(user);
@@ -13,6 +13,7 @@ const socket = (io) => {
                     _id: user._id,
                     username: user.username,
                     socketId: socket.id,
+                    profile: user.profile,
                 });
             }
 
@@ -36,9 +37,21 @@ const socket = (io) => {
             io.emit("chatlist", data);
         });
 
+        // user typing
+        socket.on("user-typing", (userId) => {
+            console.log("typing : ", userId);
+            io.emit("typing", userId);
+        });
+
+        // user stop typing
+        socket.on("stop-typing", (userId) => {
+            console.log("stop : ", userId);
+            io.emit("stopTyping", userId);
+        });
+
         // messages
         socket.on("newMessage", async (data) => {
-            console.log(data);
+            // console.log(data);
             const { sender, text, chatId, profile, username, receiverId } =
                 data;
             const message = await createMessage(text, sender, chatId);

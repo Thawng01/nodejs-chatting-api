@@ -46,6 +46,20 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+// search a user by username
+// route -> /users/search/username
+router.get("/search/:username", async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const users = await User.find({ $text: { $search: username } }).exec();
+        res.status(200).send(users || []);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ error: "Something went wrong!" });
+    }
+});
+
 // update user name
 // route -> /users/username/id
 router.put("/username/:id", async (req, res) => {

@@ -20,10 +20,11 @@ const userSchema = new mongoose.Schema(
         },
 
         profile: String,
-        backgroundColor: String,
     },
     { timestamps: true }
 );
+
+userSchema.index({ username: "text" });
 
 userSchema.methods.generateUserToken = function () {
     return jwt.sign(
